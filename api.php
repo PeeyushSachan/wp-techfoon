@@ -96,24 +96,27 @@ class UserAPI {
     }
 
     private function deleteUser() {
-        parse_str(file_get_contents("php://input"), $_DELETE);
-        $email = $_DELETE['email'] ?? null;
-
+        $email = $_GET['email'] ?? null; // Use query string for DELETE request
+    
         if (!$email) {
             $this->respond('error', 'Email is required.');
         }
-
+    
+        // Prepare the DELETE SQL query
         $stmt = $this->con->prepare("DELETE FROM RegistarData WHERE email = ?");
         $stmt->bind_param('s', $email);
-
+    
+        // Execute the query
         if ($stmt->execute() && $stmt->affected_rows > 0) {
             $this->respond('success', 'User deleted successfully.');
         } else {
             $this->respond('error', 'User not found or failed to delete.');
         }
     }
+    
 }
 
 $api = new UserAPI($con);
 $api->handleRequest();
+
 ?>
