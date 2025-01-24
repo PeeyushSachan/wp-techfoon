@@ -1,14 +1,15 @@
 <?php
-$host = 'm7wltxurw8d2n21q.cbetxkdyhwsb.us-east-1.rds.amazonaws.com';
-$username = 'bul8vkdz02hrkuai';
-$password = 'bvs15f11onmpqwxm';
-$database = 'ttw1ai74taxl76ho';
+// Database connection
+$host = "m7wltxurw8d2n21q.cbetxkdyhwsb.us-east-1.rds.amazonaws.com";
+$username = "bul8vkdz02hrkuai";
+$password = "bvs15f11onmpqwxm";
+$database = "ttw1ai74taxl76ho";
+$port = "3306";
 
-// Create a new connection to the MySQL database
-$con = new mysqli($host, $username, $password, $database, 3306);
+$con = new mysqli($host, $username, $password, $database, $port);
 
-// Check if the connection is successful
+// Check connection
 if ($con->connect_error) {
-    die("Database connection failed: " . $con->connect_error);
+    die("Connection failed: " . $con->connect_error);
 }
 ?>
