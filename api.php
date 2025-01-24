@@ -45,36 +45,40 @@ class UserAPI {
     }
 
     private function insertUser() {
-        $name = $_POST['Name'] ?? null;
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['Pass'] ?? null;
-        $cpass = $_POST['cpass'] ?? null;
-
+        // Read the JSON body
+        $input = json_decode(file_get_contents('php://input'), true);
+    
+        $name = $input['Name'] ?? null;
+        $email = $input['email'] ?? null;
+        $password = $input['Pass'] ?? null;
+        $cpass = $input['cpass'] ?? null;
+    
         if (!$name || !$email || !$password || !$cpass) {
             $this->respond('error', 'All fields are required.');
         }
-
+    
         if ($password !== $cpass) {
             $this->respond('error', 'Passwords do not match.');
         }
-
+    
         $stmt = $this->con->prepare("SELECT * FROM RegistarData WHERE email = ?");
         $stmt->bind_param('s', $email);
         $stmt->execute();
-
+    
         if ($stmt->get_result()->num_rows > 0) {
             $this->respond('error', 'Email already exists.');
         }
-
+    
         $stmt = $this->con->prepare("INSERT INTO RegistarData (Name, email, Pass) VALUES (?, ?, ?)");
         $stmt->bind_param('sss', $name, $email, $password);
-
+    
         if ($stmt->execute()) {
             $this->respond('success', 'User registered successfully.');
         } else {
             $this->respond('error', 'Failed to register user.');
         }
     }
+    
 
     private function getUser() {
         $email = $_GET['email'] ?? null;
