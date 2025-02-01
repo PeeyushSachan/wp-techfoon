@@ -87,7 +87,7 @@ class UserAPI {
             $this->respond('error', 'Email is required.');
         }
 
-        $stmt = $this->con->prepare("SELECT Name, email FROM RegistarData WHERE email = ?");
+        $stmt = $this->con->prepare("SELECT Name, email , Pass FROM RegistarData WHERE email = ?");
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $result = $stmt->get_result();
